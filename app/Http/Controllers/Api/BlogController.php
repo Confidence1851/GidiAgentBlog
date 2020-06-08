@@ -87,6 +87,8 @@ class BlogController extends Controller
         if(empty($response)){
             return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
         }
+        // $response['comments']  = $response->comments();
+        // $response['category']  = $response->category();
         return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
     }
 
