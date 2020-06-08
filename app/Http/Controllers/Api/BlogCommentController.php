@@ -13,6 +13,9 @@ class BlogCommentController extends Controller
 
     protected $user;
     protected $post_comment;
+    protected $SuccessCode = 200;
+    protected $NotFoundCode = 404;
+    protected $ValidationErrorCode = 422;
 
     /**
      * PostCategoryController constructor.
@@ -33,7 +36,7 @@ class BlogCommentController extends Controller
      */
     public function index()
     {
-        return response()->json($this->post_comment->all() , 200);
+        return response()->json($this->post_comment->all() , $this->SuccessCode);
     }
 
     /**
@@ -60,7 +63,7 @@ class BlogCommentController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
         $data['author_id'] = $this->user->user();
@@ -79,10 +82,10 @@ class BlogCommentController extends Controller
     {
         $response =  $this->post_comment->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         // $response['post'] = $response->post();
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -107,7 +110,7 @@ class BlogCommentController extends Controller
     {
         $response =  $this->post_comment->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         $validator =  Validator::make($request->all(),[
             'post_id' => 'required|string|exists:blog_posts,id',
@@ -115,12 +118,12 @@ class BlogCommentController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
 
         $response =  $this->post_comment->update($id , $data);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -133,9 +136,9 @@ class BlogCommentController extends Controller
     {
         $response =  $this->post_category->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         $response->delete($id);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 }

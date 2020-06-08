@@ -15,6 +15,9 @@ class BlogController extends Controller
 
     protected $user;
     protected $post;
+    protected $SuccessCode = 200;
+    protected $NotFoundCode = 404;
+    protected $ValidationErrorCode = 422;
 
     /**
      * PostController constructor.
@@ -64,7 +67,7 @@ class BlogController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
         $data['author_id'] = $this->user->user();
@@ -85,11 +88,11 @@ class BlogController extends Controller
     {
         $response =  $this->post->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         // $response['comments']  = $response->comments();
         // $response['category']  = $response->category();
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -114,7 +117,7 @@ class BlogController extends Controller
     {
         $response =  $this->post->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
 
         $validator =  Validator::make($request->all(),[
@@ -125,7 +128,7 @@ class BlogController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
         $data['author_id'] = $this->user->user();
@@ -133,7 +136,7 @@ class BlogController extends Controller
         $data['image'] = 'Store image and return filename';
 
         $response =  $this->post->update($id ,$data);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -146,9 +149,9 @@ class BlogController extends Controller
     {
         $response =  $this->post->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         $response->delete($id);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 }

@@ -13,6 +13,9 @@ class BlogCategoryController extends Controller
 
     protected $user;
     protected $post_category;
+    protected $SuccessCode = 200;
+    protected $NotFoundCode = 404;
+    protected $ValidationErrorCode = 422;
 
     /**
      * PostCategoryController constructor.
@@ -33,7 +36,7 @@ class BlogCategoryController extends Controller
      */
     public function index()
     {
-        return response()->json($this->post_category->all() , 200);
+        return response()->json($this->post_category->all() , $this->SuccessCode);
     }
 
     /**
@@ -59,7 +62,7 @@ class BlogCategoryController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
         $data['author_id'] = $this->user->user();
@@ -78,9 +81,9 @@ class BlogCategoryController extends Controller
     {
         $response =  $this->post_category->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -105,7 +108,7 @@ class BlogCategoryController extends Controller
     {
         $response =  $this->post_category->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
 
         $validator =  Validator::make($request->all(),[
@@ -113,12 +116,12 @@ class BlogCategoryController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
         $data = $request->all();
 
         $response =  $this->post_category->update($id , $data);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 
     /**
@@ -131,9 +134,9 @@ class BlogCategoryController extends Controller
     {
         $response =  $this->post_category->get($id);
         if(empty($response)){
-            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => 'Not Found' , 'status' => $this->NotFoundCode]);
         }
         $response->post_category->delete($id);
-        return response()->json(['success' => true ,'data' => $response ,'status' => 200]);
+        return response()->json(['success' => true ,'data' => $response ,'status' => $this->SuccessCode]);
     }
 }

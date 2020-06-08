@@ -11,6 +11,10 @@ class ContactUsController extends Controller
 {
     protected $contact;
 
+    protected $SuccessCode = 200;
+    protected $NotFoundCode = 404;
+    protected $ValidationErrorCode = 422;
+
     /**
      * PostController constructor.
      *
@@ -37,7 +41,7 @@ class ContactUsController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => 400]);
+            return response()->json(['success' => false ,'data' => $validator->errors() , 'status' => $this->ValidationErrorCode]);
         }
 
         $response =  $this->contact->store($request->all());
