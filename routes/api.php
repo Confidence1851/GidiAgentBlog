@@ -41,7 +41,7 @@ Route::post('posts/delete/{post}', 'Api\BlogController@destroy')->name('posts.de
 // Post Comment Endpoints
 Route::get('post-comments', 'Api\BlogCommentController@index')->name('post_comments');
 Route::post('post-comments/store', 'Api\BlogCommentController@store')->name('post_comments.store');
-Route::get('post-comments/show/{comment}', 'Api\BlogCommentController@show')->name('post_comments.show');
+Route::get('post-comments/{comment}', 'Api\BlogCommentController@show')->name('post_comments.show');
 Route::post('post-comments/update/{comment}', 'Api\BlogCommentController@update')->name('post_comments.update');
 Route::post('post-comments/delete/{comment}', 'Api\BlogCommentController@destroy')->name('post_comments.destroy');
 
